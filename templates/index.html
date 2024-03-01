@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Google Slides Translation Add-on</title>
+<!-- Include the Google Slides API library. -->
+<script src="https://apis.google.com/js/api.js"></script>
+<!-- Include the Google Apps Script API library. -->
+<script src="https://script.googleapis.com/v1/script.js"></script>
+<script>
+// Replace this with the API Key for your Google Apps Script project.
+const API_KEY = 'YOUR_API_KEY';
+// Replace this with the Client ID for your Google Apps Script project.
+const CLIENT_ID = 'YOUR_CLIENT_ID';
+// The ID of the Google Slide presentation.
+const PRESENTATION_ID = 'YOUR_PRESENTATION_ID';
+
+// Initialize the Google APIs.
+function init() {
+gapi.load('client', initializeGapiClient);
+}
+
+// Initialize the Google Apps Script API.
+function initializeGapiClient() {
+gapi.client.init({
+apiKey: API_KEY,
+discoveryDocs: ['https://script.googleapis.com/$discovery/rest'],
+clientId: CLIENT_ID,
+scope: 'https://www.googleapis.com/auth/script.projects',
+});
+}
+
+// Open the sidebar when a user action is performed.
+function openSidebar() {
+gapi.client.script.projects.run({
+resource: {
+function: 'openSidebar',
+parameters: [PRESENTATION_ID],
+},
+});
+}
+
+// Get the selected text and open the sidebar.
+document.addEventListener('selectionchange', function() {
+const selection = document.getSelection();
+if (selection.toString()) {
+openSidebar();
+}
+});
+</script>
+</head>
+
+<body>
+<h1>Google Slides Translation Add-on</h1>
+<p>
+This add-on allows you to translate text in Google Slides presentations. To use it, select some text,
+right-click, and choose "Translate". The sidebar will open, allowing you to choose the source and
+target languages. Once you have made your selections, click the "Translate" button to replace the
+original text with the translated text.
+</p>
+<button onclick="openSidebar()">Open Sidebar</button>
+</body>
+</html>
+
